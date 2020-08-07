@@ -12,6 +12,19 @@ export class TasksTree extends React.Component {
         tasks: [],
     };
 
+    componentDidMount() {
+        getWorkTasks(organization, project)
+        .then((res) => {
+            const workItems = res.workItems;
+
+            getWorkItemsByID(organization, project, workItems.map((item) => item.id))
+            .then((res) => {
+                const tree = this.getTreeWorkItem(res);
+                this.setState({ tasks: tree });
+            });
+        });
+    }
+
     getTreeWorkItem(workItems: WorkItemDto[]): ITask[] {
         const rootWorkItem = workItems.filter((item) => item.fields["System.Parent"] === undefined);
         const childWorkItem = workItems.filter((item) => item.fields["System.Parent"] !== undefined);
@@ -43,17 +56,8 @@ export class TasksTree extends React.Component {
         }
     }
 
-    componentDidMount() {
-        getWorkTasks(organization, project)
-        .then((res) => {
-            const workItems = res.workItems;
-
-            getWorkItemsByID(organization, project, workItems.map((item) => item.id))
-            .then((res) => {
-                const tree = this.getTreeWorkItem(res);
-                this.setState({ tasks: tree });
-            });
-        });
+    handleDeleteItem = (id: number) => {
+        this.setState({ tasks: this.state.tasks.filter((task: ITask) => task.id !== id) });
     }
 
     render() {
@@ -68,7 +72,10 @@ export class TasksTree extends React.Component {
                     { this.state.tasks.map((task: ITask) => {
                             return (
                                 <>
-                                    <Task task={task} />
+                                    <Task
+                                        task={task}
+                                        onDeletedItem={(id: number) => this.handleDeleteItem(id)}
+                                    />
                                 </>
                             );
                         })}
