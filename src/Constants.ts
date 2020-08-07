@@ -1,0 +1,1 @@
+export const azureDevOpsHist = 'https://dev.azure.com/';
