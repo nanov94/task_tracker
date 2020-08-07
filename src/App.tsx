@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { TasksTree } from './Conponents/TasksTree/TasksTree';
+import { TasksTree } from './Components/TasksTree/TasksTree';
 
 function App() {
   return (
