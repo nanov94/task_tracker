@@ -1,4 +1,4 @@
-This project are simple task tracker from Azure DevOps.
+# This project are simple task tracker from Azure DevOps.
 
 ## Start application
 1. git clone
